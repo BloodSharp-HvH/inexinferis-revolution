@@ -2,6 +2,7 @@
 #define FAKESTEAMID_H
 
 #include "utils.h"
+#include <cstdint>
 
 VOID HookSendTo();
 VOID UnHookSendTo();
@@ -11,12 +12,12 @@ typedef struct dictionary_s{
   char value[256];
 }dictionary_t;
 
-typedef struct PACKED steampack_s{
+typedef struct steampack_s{
   DWORD data;
-  DWORD key1;
+  int32_t key1;
   DWORD ver;
   DWORD unk1;
-  DWORD key2;
+  int32_t key2;
   DWORD key3;
   CHAR keys[16];
   CHAR unk[130];

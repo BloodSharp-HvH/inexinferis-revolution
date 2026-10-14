@@ -250,7 +250,7 @@ char *SteamProtocol::DumpConnect(int* len){
   pack.key1=MakeSteamId(pack.keys);
   pack.ver=0x00726576;//ver
   pack.unk1=0;
-  pack.key2=2*((int)pack.key1<0 ? -pack.key1 : pack.key1);
+  pack.key2=2*((DWORD)pack.key1<0 ? -pack.key1 : pack.key1);
   pack.key3=0x01100001;
   pack.unk[118]=0x20;
   pack.unk[122]=0x01;

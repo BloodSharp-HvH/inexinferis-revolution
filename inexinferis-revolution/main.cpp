@@ -100,7 +100,7 @@ VOID HookStudio(r_studio_interface_t* pInterface,engine_studio_api_t *pStudioApi
   pRenderer->StudioRenderModel=hStudioRenderModel;
   VirtualProtect((PVOID)&pRenderer->StudioRenderModel,4,dwback,&dwback);*/
   //hwbp
-  pStudioRenderModel=(tStudioRenderModel)HookFunc((PBYTE)pRenderer->StudioRenderModel,(PBYTE)hStudioRenderModel);
+  //pStudioRenderModel=(tStudioRenderModel)HookFunc((PBYTE)pRenderer->StudioRenderModel,(PBYTE)hStudioRenderModel);
 }
 
 VOID OffsetsThread(){
@@ -211,12 +211,12 @@ Extra:\n\
   if(bInvalidVideoMode)
     gEngfuncs.pfnConsolePrint(" **********      WARNING! Invalid Video Mode!      ***********\n\
 ============================================\n");
-  gEngfuncs.pfnClientCmd("fs_lazy_precache 1");
-  gEngfuncs.pfnClientCmd("toggleconsole");
+  gEngfuncs.pfnClientCmd((char*)"fs_lazy_precache 1");
+  gEngfuncs.pfnClientCmd((char*)"toggleconsole");
   //unbind cheat keys
-  gEngfuncs.pfnClientCmd("unbind F4");
-  gEngfuncs.pfnClientCmd("unbind F5");
-  gEngfuncs.pfnClientCmd("unbind F6");
+  gEngfuncs.pfnClientCmd((char*)"unbind F4");
+  gEngfuncs.pfnClientCmd((char*)"unbind F5");
+  gEngfuncs.pfnClientCmd((char*)"unbind F6");
 }
 
 DWORD WINAPI StartThread(HINSTANCE hInstance){

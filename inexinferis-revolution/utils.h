@@ -4,7 +4,7 @@
 #define _WIN32_WINNT 0x0500
 #include <windows.h>
 #include <tlhelp32.h>
-#include <ntdll.h>
+//#include <ntdll.h>
 #include <psapi.h>
 
 #ifndef __max
@@ -68,17 +68,16 @@ typedef struct _t_res {
   DWORD value;
 } t_res;
 
-DWORD WINAPI GetWinVr();
-BOOL WINAPI FileExists(LPCSTR filename);
-BOOL WINAPI DirectoryExist(LPCSTR szPath);
+BOOL FileExists(LPCSTR filename);
+BOOL DirectoryExist(LPCSTR szPath);
 
-PVOID WINAPI RedirectFunc(PBYTE Address);
-PVOID WINAPI HookFunc(PBYTE Address,PBYTE newAddress);
-BOOL WINAPI UnHookFunc(PBYTE Address,PBYTE newAddress);
-UINT WINAPI IstructionSize(PBYTE src);
-PBYTE WINAPI FindIstruction(PBYTE src,BYTE instruction);
-ULONG WINAPI CalcIstructionSize(PBYTE src,DWORD lenNeed,t_res *res);
-DWORD WINAPI GetModuleBaseAndSize(LPCSTR lpModuleName,PDWORD pSize);
+PVOID RedirectFunc(PBYTE Address);
+PVOID HookFunc(PBYTE Address,PBYTE newAddress);
+BOOL UnHookFunc(PBYTE Address,PBYTE newAddress);
+UINT IstructionSize(PBYTE src);
+PBYTE FindIstruction(PBYTE src,BYTE instruction);
+ULONG CalcIstructionSize(PBYTE src,DWORD lenNeed,t_res *res);
+DWORD GetModuleBaseAndSize(LPCSTR lpModuleName,PDWORD pSize);
 
 typedef struct _CLIENT_ID {
    HANDLE UniqueProcess;

@@ -2,6 +2,7 @@
 #define WALLHACK_H
 
 #define M_PI 3.14159265358979323846
+#define M_PI_2 (M_PI/2.0)
 #define BOUND_VALUE(var,min,max) if((var)>(max)){(var)=(max);};if((var)<(min)){(var)=(min);}
 
 #include "engine/wrect.h"

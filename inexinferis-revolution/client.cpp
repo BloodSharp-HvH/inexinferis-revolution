@@ -121,9 +121,9 @@ int HUD_Redraw(float x,int y) {
           gRadar.DrawRadar();
         if(bEngRadar!=cvar.radar) {
           if(cvar.radar)
-            gEngfuncs.pfnClientCmd("hideradar");
+            gEngfuncs.pfnClientCmd((char*)"hideradar");
           else
-            gEngfuncs.pfnClientCmd("drawradar");
+            gEngfuncs.pfnClientCmd((char*)"drawradar");
           bEngRadar=cvar.radar;
         }
         if(!cvar.antiss&&cvar.speedmode&&cvar.autoroute&&(cvar.ardraw==1||(cvar.ardraw==2&&cvar.barrel)))
@@ -851,7 +851,7 @@ void SoundFilter(int index,const char *sample,float *origin) {
       int smcindex=cSoundMark::GetIndex(index,origin,false);
       cSoundMark &mark=gSoundMark[smcindex];
       mark.player=(smcindex>0&&smcindex<MAX_VPLAYERS);
-      mark.weapon="Unknown";
+      mark.weapon= (char*)"Unknown";
       if(bPlats) {
         strcpy(mark.desc,"Vehicle");
         mark.color=4;
@@ -1008,7 +1008,9 @@ int	hStudioDrawModel(int flags) {
 
 void hStudioRenderModel() {
   PVOID _this;//save this pointer!
-  asm("mov %%ecx,%0;\r\t":"=m"(_this));
+  __asm {
+      mov _this, ecx;
+  }
   if(!bInvalidVideoMode) {
     cPlayer *player=gPlayers.GetCurrentEntity();
     if(cvar.active&&!cvar.takingss&&(!cvar.antiss||!gMe.IsFreeSpectator())&&
@@ -1028,8 +1030,10 @@ void hStudioRenderModel() {
         oglChamsColor[1]=fmin(color.fg+color.fr,1.0);
         oglChamsColor[2]=fmin(color.fb+color.fg,1.0);
 
-        asm("mov %0,%%ecx;\r\t"::"m"(_this));
-        gRenderer.StudioRenderFinal();
+        __asm {
+            mov _this, ecx
+            call gRenderer.StudioRenderFinal;
+        }
 
         // render visible part
         if(pglEnable)
@@ -1039,8 +1043,10 @@ void hStudioRenderModel() {
         oglChamsColor[1]=color.fg;
         oglChamsColor[2]=color.fb;
 
-        asm("mov %0,%%ecx;\r\t"::"m"(_this));
-        gRenderer.StudioRenderFinal();
+        __asm {
+            mov _this, ecx
+            call gRenderer.StudioRenderFinal;
+        }
 
         if(pglEnable)
           pglEnable(GL_TEXTURE_2D);
@@ -1059,8 +1065,10 @@ void hStudioRenderModel() {
         if(pglDepthFunc)
           pglDepthFunc(GL_GREATER);
 
-        asm("mov %0,%%ecx;\r\t"::"m"(_this));
-        gRenderer.StudioRenderFinal();
+        __asm {
+            mov _this, ecx
+            call gRenderer.StudioRenderFinal;
+        }
 
         gEngStudio.SetChromeOrigin();
         gEngStudio.SetForceFaceFlags(STUDIO_NF_CHROME);
@@ -1074,14 +1082,18 @@ void hStudioRenderModel() {
         if(pglDepthFunc)
           pglDepthFunc(GL_LESS);
 
-        asm("mov %0,%%ecx;\r\t"::"m"(_this));
-        gRenderer.StudioRenderFinal();
+        __asm {
+            mov _this, ecx
+            call gRenderer.StudioRenderFinal;
+        }
       }
       return;
     }
   }
-  asm("mov %0,%%ecx;\r\t"::"m"(_this));
-  pStudioRenderModel();
+  __asm {
+      mov _this, ecx
+      call gRenderer.StudioRenderFinal;
+  }
 }
 
 //==================================================================================
@@ -1157,13 +1169,13 @@ static int TeamInfo(const char *pszName, int iSize, void *pbuf) {
   static const char * STR_CT="CT";
   static const char * STR_UNASSIGNED="UNASSIGNED";
   static const char * STR_SPECTATOR="SPECTATOR";
-  if(!stricmp(teamtext,STR_TERROR))
+  if(!_stricmp(teamtext,STR_TERROR))
     team=1;
-  else if(!stricmp(teamtext,STR_CT))
+  else if(!_stricmp(teamtext,STR_CT))
     team=2;
-  else if(!stricmp(teamtext,STR_UNASSIGNED))
+  else if(!_stricmp(teamtext,STR_UNASSIGNED))
     team=0;
-  else if(!stricmp(teamtext,STR_SPECTATOR))
+  else if(!_stricmp(teamtext,STR_SPECTATOR))
     team=0;
   gPlayers[px]->team=team;
   if(px==gMe.index)gMe.team=team;
@@ -1391,7 +1403,7 @@ void connectcmd(void) {
 void motd_writecmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("motd_write");
+    EchoCmdBlocked((char*)"motd_write");
   else
     pMotdWrite();
 }
@@ -1399,7 +1411,7 @@ void motd_writecmd() {
 void unbindallcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("unbindall");
+    EchoCmdBlocked((char*)"unbindall");
   else
     pUnbindAll();
 }
@@ -1407,7 +1419,7 @@ void unbindallcmd() {
 void unbindcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("unbind");
+    EchoCmdBlocked((char*)"unbind");
   else
     pUnbind();
 }
@@ -1415,7 +1427,7 @@ void unbindcmd() {
 void timerefreshcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("timerefresh");
+    EchoCmdBlocked((char*)"timerefresh");
   else
     pTimeRefresh();
 }
@@ -1423,7 +1435,7 @@ void timerefreshcmd() {
 void writecfgcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("writecfg");
+    EchoCmdBlocked((char*)"writecfg");
   else
     pWriteCfg();
 }
@@ -1431,7 +1443,7 @@ void writecfgcmd() {
 void dropclientcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("dropclient");
+    EchoCmdBlocked((char*)("dropclient"));
   else
     pDropClient();
 }
@@ -1439,7 +1451,7 @@ void dropclientcmd() {
 void quitcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("quit");
+    EchoCmdBlocked((char*)"quit");
   else
     pQuit();
 }
@@ -1447,7 +1459,7 @@ void quitcmd() {
 void exitcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("exit");
+    EchoCmdBlocked((char*)"exit");
   else
     pExit();
 }
@@ -1455,7 +1467,7 @@ void exitcmd() {
 void killcmd() {
   const char *p=gEngfuncs.pfnGetLevelName();
   if(cvar.blocksrvcmd&&*p!=0)
-    EchoCmdBlocked("kill");
+    EchoCmdBlocked((char*)"kill");
   else
     pKill();
 }
@@ -1465,7 +1477,7 @@ void killcmd() {
 pfnEvent HookEvent(const char *name,pfnEvent pfn) {
   if(pEventList) {
     for(eventlist_t *pev=*pEventList; pev!=NULL; pev=pev->next) {
-      if(pev->name&&pev->pfn&&!stricmp(name,pev->name)) {
+      if(pev->name&&pev->pfn&&!_stricmp(name,pev->name)) {
         pfnEvent ret=pev->pfn;
         pev->pfn=pfn;
         return ret;
@@ -1478,7 +1490,7 @@ pfnEvent HookEvent(const char *name,pfnEvent pfn) {
 pfnUserMsgHook HookUserMsg(const char *name,pfnUserMsgHook pfn) {
   if(pUserMsgList) {
     for(usermsglist_t *umsg=*pUserMsgList; umsg!=NULL; umsg=umsg->next) {
-      if(umsg->name&&umsg->pfn&&!stricmp(name,umsg->name)) {
+      if(umsg->name&&umsg->pfn&&!_stricmp(name,umsg->name)) {
         pfnUserMsgHook ret=umsg->pfn;
         umsg->pfn=pfn;
         return ret;
@@ -1491,7 +1503,7 @@ pfnUserMsgHook HookUserMsg(const char *name,pfnUserMsgHook pfn) {
 pfnSrvCmd HookSrvCmd(const char *name,pfnSrvCmd pfn) {
   if(pSrvCmdList) {
     for(srvcmdlist_t *cmd=*pSrvCmdList; cmd!=NULL; cmd=cmd->next) {
-      if(cmd->name&&cmd->pfn&&!stricmp(name,cmd->name)) {
+      if(cmd->name&&cmd->pfn&&!_stricmp(name,cmd->name)) {
         pfnSrvCmd ret=cmd->pfn;
         cmd->pfn=pfn;
         return ret;

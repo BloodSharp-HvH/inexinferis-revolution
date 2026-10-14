@@ -742,12 +742,12 @@ ULONG CalcIstructionSize(PBYTE src,DWORD lenNeed,t_res *res){
   return (cmd-src);
 }
 
-BOOL WINAPI FileExists(LPCSTR szPath){
+BOOL FileExists(LPCSTR szPath){
 	DWORD dwAttrib=GetFileAttributes(szPath);
 	return (dwAttrib!=INVALID_FILE_ATTRIBUTES&&!(dwAttrib&FILE_ATTRIBUTE_DIRECTORY));
 }
 
-BOOL WINAPI DirectoryExist(LPCSTR szPath){
+BOOL DirectoryExist(LPCSTR szPath){
 	DWORD dwAttrib=GetFileAttributes(szPath);
 	return (dwAttrib!=INVALID_FILE_ATTRIBUTES&&(dwAttrib&FILE_ATTRIBUTE_DIRECTORY));
 }
@@ -804,7 +804,7 @@ BOOL UnHookFunc(PBYTE Address,PBYTE newAddress){
   return TRUE;
 }
 
-DWORD WINAPI GetModuleBaseAndSize(LPCSTR lpModuleName,PDWORD pSize){
+DWORD GetModuleBaseAndSize(LPCSTR lpModuleName,PDWORD pSize){
   MODULEINFO modinfo;
   HMODULE hModule=GetModuleHandle(lpModuleName);
   if(hModule){
@@ -814,66 +814,4 @@ DWORD WINAPI GetModuleBaseAndSize(LPCSTR lpModuleName,PDWORD pSize){
     }
   }
   return 0;
-}
-
-DWORD WINAPI GetWinVr() {
-  DWORD wversion = (DWORD)-1;
-  OSVERSIONINFO info;
-  ZeroMemory(&info, sizeof(info));
-  info.dwOSVersionInfoSize = sizeof(info);
-  GetVersionEx(&info);
-  switch(info.dwMajorVersion){
-    case 10:
-      if(info.dwMinorVersion==0){
-        switch(info.dwBuildNumber){
-          case 10240:
-            wversion=WIN10;
-          break;
-          case 10586:
-            wversion=WIN10TH2;
-          break;
-          case 14393:
-            wversion=WIN10AU;
-          break;
-          case 15063:
-            wversion=WIN10CU;
-          break;
-          case 16299:
-            wversion=WIN10FCU;
-          break;
-          default:break;
-        }
-      }
-    break;
-    case 6:
-      switch(info.dwMinorVersion){
-        case 0:
-          wversion=WINVISTA;
-        break;
-        case 1:
-          wversion=WIN7;
-        break;
-        case 2:
-          wversion=WIN8;
-        break;
-        case 3:
-          wversion=WIN81;
-        break;
-        default:break;
-      }
-    break;
-    case 5:
-      switch(info.dwMinorVersion){
-        case 1:
-          wversion=WINXP;
-        break;
-        case 2:
-          wversion=WIN2K3;
-        break;
-        default:break;
-      }
-    break;
-    default:break;
-  }
-  return wversion;
 }

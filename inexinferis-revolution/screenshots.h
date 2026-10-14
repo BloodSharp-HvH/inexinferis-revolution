@@ -43,7 +43,7 @@
 
 #pragma pack(push,1)
 
-typedef struct PACKED _SSMSG{
+typedef struct _SSMSG{
   DWORD uBuffSize;
   BITMAPINFO bmi;
   BYTE  pBuffer[];

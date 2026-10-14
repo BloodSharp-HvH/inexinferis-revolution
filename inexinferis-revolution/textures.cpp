@@ -1,6 +1,6 @@
 #include "textures.h"
 
-static char *gcTexturesFile = "sound/materials.txt";
+static char *gcTexturesFile = (char*)"sound/materials.txt";
 static char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];
 static char grgchTextureType[CTEXTURESMAX];
 static int gcTextures = 0;
@@ -10,7 +10,7 @@ char FindTextureType(char *name){
 	right=gcTextures-1;
 	while(left<=right){
 		pivot=(left+right)/2;
-		val=strnicmp(name,grgszTextureName[pivot],CBTEXTURENAMEMAX-1);
+		val=_strnicmp(name,grgszTextureName[pivot],CBTEXTURENAMEMAX-1);
 		if(val==0)
       return grgchTextureType[pivot];
 		else if(val>0)
@@ -60,7 +60,7 @@ void SortTextures(void){
 	int i,j;
 	for(i=0;i<gcTextures;i++)
   for(j=i+1;j<gcTextures;j++)
-    if(stricmp(grgszTextureName[i],grgszTextureName[j])>0)
+    if(_stricmp(grgszTextureName[i],grgszTextureName[j])>0)
       SwapTextures(i,j);
 }
 

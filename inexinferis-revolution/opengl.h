@@ -44,8 +44,6 @@ typedef GLboolean (WINAPI *tglUnmapBuffer)(GLenum target);
 typedef void (WINAPI *tglGenBuffers)(GLsizei n,GLuint * buffers);
 typedef void (WINAPI *tglBufferData)(GLenum target,GLsizei size,const GLvoid * data,GLenum usage);
 
-typedef int (WINAPI *tSetCltProcTable)(PDWORD pDst1,PDWORD pDst2,DWORD iSize);
-
 BOOL WINAPI HookOpenGl();
 void WINAPI glCreateTextureBuffer(GLint width,GLint height,GLvoid* data);
 void WINAPI glDrawTexture(GLint x,GLint y,GLint width,GLint height);
